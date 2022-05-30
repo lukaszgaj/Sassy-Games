@@ -1,0 +1,13 @@
+/node_modules
+/.idea/workspace.xml
+/.idea/usage.statistics.xml
+/.idea/tasks.xml
+/.vscode
+/.nyc_output
+/coverage
+/config/config.override.ts
+/var
+/build
+/docker-compose.override.yml
+ormconfig.json
+combined.log

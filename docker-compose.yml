@@ -1,0 +1,46 @@
+version: "3.1"
+services:
+  db:
+    platform: linux/amd64
+    image: mysql:8.0.29
+    container_name: sassy-games-server-db
+    volumes:
+      - ./server/docker/mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./server/var/docker/mysql/var/lib/mysql:/var/lib/mysql
+    env_file:
+      - server/docker/containers-config.env
+    ports:
+      - "18202:3306"
+
+  api:
+    platform: linux/amd64
+    build: 
+      context: ./server
+    container_name: sassy-games-server-api
+    volumes:
+      - .:/application/server:cached
+      - /application/client/node_modules
+    env_file:
+      - ./server/docker/containers-config.env
+    links:
+      - db
+    ports:
+      - "18200:8000"
+      - "18201:9229"
+    environment:
+      - APP_ENV=docker      
+
+  client:
+    platform: linux/amd64
+    build: 
+      context: ./client
+    container_name: sassy-games-client
+    volumes:
+      - .:/application/client:cached
+      - /application/client/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - APP_ENV=docker
+
+      
